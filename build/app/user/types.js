@@ -8,6 +8,6 @@ exports.types = `#graphql
         firstName:String!
         lastName:String!
         email:String!
-        profileImageUrl:String
+        profileImageURL:String
     }
 `;

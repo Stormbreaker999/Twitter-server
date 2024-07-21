@@ -15,11 +15,11 @@ datasource db {
 }
 
 model User{
-  id String @id @default(cuid())
-  firstName String
-  lastName String?
-  email String @unique
-  profileImageURL String?
+  id string @id @default(cuid())
+  firstName string
+  lastName string?
+  email string @unique
+  profileImageURL string?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -19,6 +19,7 @@ const jwt_1 = __importDefault(require("../../services/jwt"));
 const queries = {
     verifyGoogleToken: (parent_1, _a) => __awaiter(void 0, [parent_1, _a], void 0, function* (parent, { token }) {
         const googleToken = token;
+        console.log(googleToken);
         const googleOauthURL = new URL('https://oauth2.googleapis.com/tokeninfo');
         googleOauthURL.searchParams.set('id_token', googleToken);
         const { data } = yield axios_1.default.get(googleOauthURL.toString(), {
@@ -43,5 +44,14 @@ const queries = {
         const jwttoken = jwt_1.default.generateTokenForUser(userInDb);
         return jwttoken;
     }),
+    getCurrentUser: (parent, args, ctx) => __awaiter(void 0, void 0, void 0, function* () {
+        var _b;
+        const id = (_b = ctx === null || ctx === void 0 ? void 0 : ctx.user) === null || _b === void 0 ? void 0 : _b.id;
+        if (!id)
+            return null;
+        const user = yield db_1.prismaClient.user.findUnique({ where: { id: id.toString() } });
+        console.log(user);
+        return user;
+    })
 };
 exports.resolvers = { queries };
