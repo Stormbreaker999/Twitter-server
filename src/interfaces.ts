@@ -1,6 +1,6 @@
 export interface JWTUser{
-    id:String;
-    email:String;
+    id:string;
+    email:string;
 }
 export interface GraphQLContext{
     user?:JWTUser;

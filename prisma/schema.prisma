@@ -9,17 +9,39 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
-model User{
-  id string @id @default(cuid())
-  firstName string
-  lastName string?
-  email string @unique
-  profileImageURL string?
+model User {
+  id              String    @id @default(cuid())
+  firstName       String
+  lastName        String?
+  email           String    @unique
+  profileImageURL String?
+  followers       Follows[] @relation("follower")
+  following       Follows[] @relation("following")
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  tweets          Tweet[]
+}
+
+model Follows {
+  follower    User   @relation("follower", fields: [followerId], references: [id])
+  followerId  String
+  following   User   @relation("following", fields: [followingId], references: [id])
+  followingId String
+
+  @@id([followerId, followingId])
+}
+
+model Tweet {
+  id       String  @id @default(cuid())
+  content  String
+  imageURL String?
+  author   User    @relation(fields: [authorId], references: [id])
+  authorId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
