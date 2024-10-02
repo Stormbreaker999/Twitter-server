@@ -5,6 +5,7 @@
   "author": "Avichal Dubey",
   "license": "MIT",
   "devDependencies": {
+    "@cloudflare/next-on-pages": "^1.13.2",
     "@types/cors": "^2.8.13",
     "@types/jsonwebtoken": "^9.0.2",
     "prisma": "^5.1.1",
@@ -26,8 +27,9 @@
     "jsonwebtoken": "^9.0.2"
   },
   "scripts": {
+    
     "start": "node build/index",
     "build": "tsc -p .",
-    "dev": "tsc-watch --onSuccess \"npm start\""
+    "dev": "tsc"
   }
 }

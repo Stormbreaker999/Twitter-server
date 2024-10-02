@@ -20,7 +20,7 @@ const queries = {
         const tweets = yield db_1.prismaClient.tweet.findMany({ orderBy: { createdAt: "desc" } });
         yield redis_1.redisClient.set('ALL_TWEETS', JSON.stringify(tweets));
         return tweets;
-    })
+    }),
 };
 const mutations = {
     createTweet: (parent_1, _a, ctx_1) => __awaiter(void 0, [parent_1, _a, ctx_1], void 0, function* (parent, { payload }, ctx) {
@@ -39,11 +39,31 @@ const mutations = {
         yield redis_1.redisClient.setex(`RATE_LIMIT:TWEET:${ctx.user.id}`, 10, 1);
         yield redis_1.redisClient.del('ALL_TWEETS');
         return tweet;
+    }),
+    likeTweet: (parent_2, _b, ctx_2) => __awaiter(void 0, [parent_2, _b, ctx_2], void 0, function* (parent, { id }, ctx) {
+        var _c;
+        if (!ctx.user)
+            throw new Error("You are not authenticated");
+        yield db_1.prismaClient.likes.create({
+            data: {
+                likedBy: { connect: { id: (_c = ctx.user) === null || _c === void 0 ? void 0 : _c.id } },
+                likedTweet: { connect: { id: id } }
+            }
+        });
+        return true;
     })
 };
 const extraResolvers = {
     Tweet: {
-        author: (parent) => db_1.prismaClient.user.findUnique({ where: { id: parent.authorId } })
+        author: (parent) => db_1.prismaClient.user.findUnique({ where: { id: parent.authorId } }),
+        usersLiked: (parent) => __awaiter(void 0, void 0, void 0, function* () {
+            const result = db_1.prismaClient.likes.findMany({ where: { likedTweet: { id: parent.id } },
+                include: {
+                    likedBy: true
+                }
+            });
+            return (yield result).map(el => el.likedBy);
+        })
     }
 };
 exports.resolvers = { mutations, extraResolvers, queries };

@@ -66,7 +66,6 @@ const extraResolvers={
                     }
                 }
             }
-            console.log("Here")
             await redisClient.setex(`RECOMMENDED_USERS:${ctx.user.id}`, 10, JSON.stringify(users))
             return users;
         }

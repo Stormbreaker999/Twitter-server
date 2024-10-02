@@ -8,7 +8,8 @@ export const types=`#graphql
         id: ID!
         content: String!
         imageURL: String
-
+        usersLiked: [User]
         author: User
     }
+    
 `;

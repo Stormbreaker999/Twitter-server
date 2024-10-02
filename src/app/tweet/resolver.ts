@@ -14,7 +14,9 @@ const queries={
         const tweets= await prismaClient.tweet.findMany({orderBy:{createdAt:"desc"}});
         await redisClient.set('ALL_TWEETS', JSON.stringify(tweets));
         return tweets;
-    }
+        
+    },
+    
 }
 const mutations={
     createTweet: async(parent:any, {payload}:{payload:CreateTweetPayload}, ctx: GraphQLContext)=>{
@@ -31,12 +33,30 @@ const mutations={
         await redisClient.setex(`RATE_LIMIT:TWEET:${ctx.user.id}`,10, 1);
         await redisClient.del('ALL_TWEETS');
         return tweet;
+    },
+    likeTweet: async(parent:any, {id}:{id:string}, ctx: GraphQLContext)=>{
+        if(!ctx.user) throw new Error("You are not authenticated");
+        await prismaClient.likes.create({
+            data:{
+                likedBy:{connect:{id:ctx.user?.id}},
+                likedTweet:{connect:{id:id}}
+            }
+        })
+        return true
     }
 }
 
 const extraResolvers={
     Tweet:{
-        author:(parent:Tweet)=>prismaClient.user.findUnique({where:{id:parent.authorId}})
+        author:(parent:Tweet)=>prismaClient.user.findUnique({where:{id:parent.authorId}}),
+        usersLiked:async(parent:Tweet)=>{
+            const result= prismaClient.likes.findMany({where:{likedTweet:{id:parent.id}},
+                include:{
+                    likedBy:true
+                }
+            });
+            return (await result).map(el=>el.likedBy);
+        }
     }
 }
 export const resolvers={mutations, extraResolvers, queries};

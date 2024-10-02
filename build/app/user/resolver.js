@@ -77,7 +77,6 @@ const extraResolvers = {
                     }
                 }
             }
-            console.log("Here");
             yield redis_1.redisClient.setex(`RECOMMENDED_USERS:${ctx.user.id}`, 10, JSON.stringify(users));
             return users;
         })
