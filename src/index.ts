@@ -5,7 +5,7 @@ const env = dotenv.config();
 
 const init = async () => {
 	const app = await initServer();
-	app.listen(8000, () => console.log("server started on port 8000"));
+	app.listen(5000, () => console.log("server started on port 5000"));
 };
 
 init();
