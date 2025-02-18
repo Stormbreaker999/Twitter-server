@@ -5,4 +5,4 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.redisClient = void 0;
 const ioredis_1 = __importDefault(require("ioredis"));
-exports.redisClient = new ioredis_1.default("rediss://default:AdSSAAIjcDFlMGQ0ZDE1YzJjMTk0NzU2YTVlYmE5YTRmYzA5YmUzMXAxMA@positive-loon-54418.upstash.io:6379");
+exports.redisClient = new ioredis_1.default("rediss://default:AUBMAAIjcDE5ZTk5YjFhY2RkMTI0NjE3OTY1OGM0ZWJkYzZiZTIxMHAxMA@prime-bulldog-16460.upstash.io:6379");
