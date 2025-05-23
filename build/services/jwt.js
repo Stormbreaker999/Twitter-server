@@ -8,8 +8,8 @@ const JWT_SECRET = '$3456765432wdfbtr4ref';
 class JWTService {
     static generateTokenForUser(user) {
         const payload = {
-            id: user === null || user === void 0 ? void 0 : user.id,
-            email: user === null || user === void 0 ? void 0 : user.email
+            id: user?.id,
+            email: user?.email
         };
         const token = jsonwebtoken_1.default.sign(payload, JWT_SECRET);
         return token;
